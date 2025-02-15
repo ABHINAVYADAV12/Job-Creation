@@ -19,61 +19,64 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-interface ComboBoxProps{
-    options:{label:string,value:string}[]
-    value?:string,
-    onChange:(value:string)=>void
-    heading:string
+interface ComboBoxProps {
+  options: { label: string; value: string }[];
+  value?: string;
+  onChange: (value: string) => void;
+  heading: string; // Heading is now used in the UI
 }
 
+const ComboBox = ({ options, value, onChange, heading }: ComboBoxProps) => {
+  const [open, setOpen] = React.useState(false);
 
-const ComboBox = ({options,value,onChange,heading}:ComboBoxProps) => {
-    const [open, setOpen] = React.useState(false)
   return (
     <Popover open={open} onOpenChange={setOpen}>
-    <PopoverTrigger asChild>
-      <Button
-        variant="outline"
-        role="combobox"
-        aria-expanded={open}
-        className="w-[200px] justify-between"
-      >
-        {value
-          ? options.find((option) => option.value === value)?.label
-          : "Select option..."}
-        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-      </Button>
-    </PopoverTrigger>
-    <PopoverContent className="w-[200px] p-0">
-      <Command>
-        <CommandInput placeholder="Search option..." />
-        <CommandList>
-          <CommandEmpty>No framework found.</CommandEmpty>
-          <CommandGroup>
-            {options.map((framework) => (
-              <CommandItem
-                key={framework.value}
-                value={framework.value}
-                onSelect={(currentValue) => {
-                    onChange(currentValue) // Update the value by calling the onChange handler
-                    setOpen(false)         // Close the popover
-                }}
-              >
-                <Check
-                  className={cn(
-                    "mr-2 h-4 w-4",
-                    value === framework.value ? "opacity-100" : "opacity-0"
-                  )}
-                />
-                {framework.label}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      </Command>
-    </PopoverContent>
-  </Popover>
-  )
-}
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-[200px] justify-between"
+        >
+          {value
+            ? options.find((option) => option.value === value)?.label
+            : "Select option..."}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] p-0">
+        <Command>
+          {/* Display heading inside the dropdown */}
+          <div className="px-3 py-2 text-sm font-medium border-b">{heading}</div>
 
-export default ComboBox
+          <CommandInput placeholder="Search option..." />
+          <CommandList>
+            <CommandEmpty>No options found.</CommandEmpty>
+            <CommandGroup>
+              {options.map((option) => (
+                <CommandItem
+                  key={option.value}
+                  value={option.value}
+                  onSelect={(currentValue) => {
+                    onChange(currentValue); // Update selected value
+                    setOpen(false); // Close dropdown
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === option.value ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {option.label}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+export default ComboBox;
