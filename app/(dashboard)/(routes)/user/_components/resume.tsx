@@ -5,15 +5,14 @@ import { Button } from "@/components/ui/button";
 import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Job, Resumes, UserProfile } from "@prisma/client"
+import {  Resumes, UserProfile } from "@prisma/client"
 import axios from "axios";
-import { isValid } from "date-fns";
 import { File, Loader2, PlusCircle, ShieldCheck, ShieldX, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Form, useForm,FormProvider } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Schema, z } from "zod";
+import { z } from "zod";
 
 interface resumeFormProps{
     initialData:(UserProfile&{resumes:Resumes[]})|null;

@@ -1,6 +1,6 @@
 "use client"
 import { BookMarked, Compass, Home,  List, User } from "lucide-react"
-import { usePathname,useRouter } from "next/navigation"
+import { usePathname} from "next/navigation"
 import SidebarRouteItem from "./side-bar-route-item"
 const adminRoutes=[
   {
