@@ -16,7 +16,7 @@ import toast from "react-hot-toast";
 import { Schema, z } from "zod";
 
 interface resumeFormProps{
-    initialData:UserProfile&{resumes:Resumes[]}
+    initialData:(UserProfile&{resumes:Resumes[]})|null;
     userId:string
 }
 const formSchema=z.object({resumes:z.object({url:z.string(),name:z.string()}).array()})

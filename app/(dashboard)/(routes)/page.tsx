@@ -1,4 +1,3 @@
-import { db } from "@/lib/db";
 import { getJobs } from "@/actions/get-jobs"; // Assuming you have this function
 import Box from "./search/_components/box";
 import { HomesearchContainer } from "../_components/home-search-container";

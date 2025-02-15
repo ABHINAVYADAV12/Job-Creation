@@ -87,7 +87,6 @@ const ImageForm = ({ initialData, jobId }: ImageFormProps) => {
                   <FormControl>
                     <ImageUpload
                       value={field.value}
-                      disabled={isSubmitting}
                       onChange={(url) => field.onChange(url)}
                       onRemove={() => field.onChange("")}
                     />

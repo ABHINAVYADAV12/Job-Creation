@@ -95,7 +95,7 @@ const CoverForm = ({ initialData, companyId }: CoverFormProps) => {
                   <FormControl>
                     <ImageUpload
                       value={field.value ||""}
-                      disabled={isSubmitting}
+                      
                       onChange={(url) => field.onChange(url)} // ✅ Handled `url` properly
                       onRemove={() => field.onChange("")}
                     />

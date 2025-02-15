@@ -1,16 +1,22 @@
-"use client"
-import dynamic from 'next/dynamic';//hydration error
-import { useMemo } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-interface EditorProps{
-    onChange:(value:string)=>void
-    value:string
+"use client";
+import dynamic from "next/dynamic";
+import { useMemo } from "react";
+import "react-quill/dist/quill.snow.css";
+
+interface EditorProps {
+  onChange: (value: string) => void;
+  value: string;
 }
-const Editor = ({onChange,value}:EditorProps) => {
-    const reactQuill=useMemo(()=>dynamic(()=>import("react-quill"),{ssr:false}),[])
-  return   <div className='bg-red-400'>
-    <ReactQuill value={value} onChange={onChange} theme='snow'/>
-  </div>
-}
-export default Editor
+
+// Dynamically import ReactQuill to avoid SSR issues
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
+const Editor = ({ onChange, value }: EditorProps) => {
+  return (
+    <div className="bg-red-400">
+      <ReactQuill value={value} onChange={onChange} theme="snow" />
+    </div>
+  );
+};
+
+export default Editor;

@@ -1,5 +1,5 @@
 "use client"
-import { Ghost, Search, X } from "lucide-react"
+import {  Search, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"

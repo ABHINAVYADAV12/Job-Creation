@@ -1,11 +1,10 @@
 "use client";
 
 import { storage } from "@/config/firebase.config";
-import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { File, FilePlus, X } from "lucide-react";
+import {  getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import {  FilePlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Button } from "./ui/button";
 
 interface ResumeUploadProps {
   disabled?: boolean;

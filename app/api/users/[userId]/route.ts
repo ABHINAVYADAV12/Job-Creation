@@ -1,7 +1,5 @@
 import { db } from "@/lib/db"
-import { UserProfile } from "@clerk/nextjs"
 import { auth } from "@clerk/nextjs/server"
-import { values } from "lodash"
 import { NextResponse } from "next/server"
 
 export const PATCH=async(req: Request)=>{
@@ -11,7 +9,7 @@ export const PATCH=async(req: Request)=>{
       if(!userId){
         return new NextResponse("Un-authorize",{status:401})
       }
-      let profile=await db.userProfile.findUnique({
+      const profile=await db.userProfile.findUnique({
         where:{
           userId
         },
