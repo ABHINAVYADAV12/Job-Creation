@@ -7,20 +7,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { ImageIcon, Pencil } from "lucide-react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { Company } from "@prisma/client";
 import Image from "next/image";
 import { ImageUpload } from "@/components/image-upload";
-import { url } from "inspector";
+
 interface LogoFormProps {
   initialData: Company;
   companyId: string;
 }
+
 const formSchema = z.object({
   logo: z.string().min(1),
 });
+
 const LogoForm = ({ initialData, companyId }: LogoFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
@@ -30,35 +31,39 @@ const LogoForm = ({ initialData, companyId }: LogoFormProps) => {
       logo: initialData?.logo || "",
     },
   });
+
   const { isSubmitting, isValid } = form.formState;
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.patch(`/api/companies/${companyId}`, values);
+      await axios.patch(`/api/companies/${companyId}`, values);
       toast.success("Company updated");
       toggleEditing();
       router.refresh();
     } catch (error) {
+      console.error(error); // ✅ Log error for debugging
       toast.error("Something went wrong");
     }
   };
+
   const toggleEditing = () => setIsEditing((current) => !current);
 
   return (
     <div className="mt-6 border bg-neutral-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between text-gray-800">
         Company Logo
-        <Button onClick={toggleEditing} variant={"ghost"}>
+        <Button onClick={toggleEditing} variant="ghost">
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="w-4 h-4 mr-2" />
-              Edit{" "}
+              Edit
             </>
           )}
         </Button>
       </div>
-      {/*display the logo */}
+      {/* Display the logo */}
       {!isEditing &&
         (!initialData.logo ? (
           <div className="flex items-center justify-center h-60 bg-neutral-200 rounded-md">
@@ -67,14 +72,14 @@ const LogoForm = ({ initialData, companyId }: LogoFormProps) => {
         ) : (
           <div className="relative w-full h-60 aspect-video mt-2">
             <Image
-              alt="Cover Image"
+              alt="Company Logo"
               fill
               className="w-full h-full object-contain"
               src={initialData?.logo}
             />
           </div>
         ))}
-      {/*on editing */}
+      {/* On editing */}
       {isEditing && (
         <Form {...form}>
           <form
@@ -87,11 +92,11 @@ const LogoForm = ({ initialData, companyId }: LogoFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <ImageUpload 
-                    value={field.value}
-                    disabled={isSubmitting}
-                    onChange={(url)=>field.onChange(url)}
-                    onRemove={()=>field.onChange("")}
+                    <ImageUpload
+                      value={field.value}
+                      disabled={isSubmitting}
+                      onChange={(url) => field.onChange(url)}
+                      onRemove={() => field.onChange("")}
                     />
                   </FormControl>
                 </FormItem>
@@ -108,4 +113,5 @@ const LogoForm = ({ initialData, companyId }: LogoFormProps) => {
     </div>
   );
 };
+
 export default LogoForm;

@@ -7,40 +7,46 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { ImageIcon, Pencil } from "lucide-react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { Company } from "@prisma/client";
 import Image from "next/image";
 import { ImageUpload } from "@/components/image-upload";
-import { url } from "inspector";
+
 interface CoverFormProps {
   initialData: Company;
   companyId: string;
 }
+
 const formSchema = z.object({
-  coverImage: z.string().min(1),
+  coverImage: z.string().min(1, "Cover image is required").optional(),
 });
+
 const CoverForm = ({ initialData, companyId }: CoverFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       coverImage: initialData?.coverImage || "",
     },
   });
+
   const { isSubmitting, isValid } = form.formState;
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.patch(`/api/companies/${companyId}`, values);
+      await axios.patch(`/api/companies/${companyId}`, values);
       toast.success("Company updated");
       toggleEditing();
       router.refresh();
     } catch (error) {
+      console.error(error); // ✅ Log the error for debugging
       toast.error("Something went wrong");
     }
   };
+
   const toggleEditing = () => setIsEditing((current) => !current);
 
   return (
@@ -53,12 +59,12 @@ const CoverForm = ({ initialData, companyId }: CoverFormProps) => {
           ) : (
             <>
               <Pencil className="w-4 h-4 mr-2" />
-              Edit{" "}
+              Edit
             </>
           )}
         </Button>
       </div>
-      {/*display the coverImage */}
+      {/* Display the coverImage */}
       {!isEditing &&
         (!initialData.coverImage ? (
           <div className="flex items-center justify-center h-60 bg-neutral-200 rounded-md">
@@ -74,7 +80,7 @@ const CoverForm = ({ initialData, companyId }: CoverFormProps) => {
             />
           </div>
         ))}
-      {/*on editing */}
+      {/* On editing */}
       {isEditing && (
         <Form {...form}>
           <form
@@ -87,11 +93,11 @@ const CoverForm = ({ initialData, companyId }: CoverFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <ImageUpload 
-                    value={field.value}
-                    disabled={isSubmitting}
-                    onChange={(url)=>field.onChange(url)}
-                    onRemove={()=>field.onChange("")}
+                    <ImageUpload
+                      value={field.value ||""}
+                      disabled={isSubmitting}
+                      onChange={(url) => field.onChange(url)} // ✅ Handled `url` properly
+                      onRemove={() => field.onChange("")}
                     />
                   </FormControl>
                 </FormItem>
@@ -108,4 +114,5 @@ const CoverForm = ({ initialData, companyId }: CoverFormProps) => {
     </div>
   );
 };
+
 export default CoverForm;
