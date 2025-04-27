@@ -5,17 +5,21 @@ import { NextResponse } from "next/server"
 export const POST=async(req: Request)=>{
     try{
       const {userId}=auth()
-      const {title}=await req.json()
+      const {title, categoryId}=await req.json()
       if(!userId){
         return new NextResponse("Un-authorize",{status:401})
       }
       if(!title){
         return new NextResponse("Title is missing",{status:401})
       }
+      if(categoryId && !/^[0-9a-fA-F]{24}$/.test(categoryId)) {
+        return new NextResponse("Invalid category ID format",{status:400})
+      }
       const job=await db.job.create({
         data:{
             userId,
-            title
+            title,
+            ...(categoryId && { categoryId })
         }
       })
       return NextResponse.json(job)

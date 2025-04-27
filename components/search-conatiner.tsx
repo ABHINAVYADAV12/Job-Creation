@@ -34,13 +34,13 @@ const SearchContainer = () => {
     }, [value,currentCategoryId,router,pathname,createdAtFilter,currentWorkMode,currentshiftTiming]);
     
   return (
-    <div className="flex items-center gap-x-2 relative flex-1">
-        <Search className="text-neutral-700 h-4 w-4 absolute left-3"/>
+    <div className="flex items-center gap-x-2 relative flex-1 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-900 p-1 rounded-lg shadow-lg">
+        <Search className="text-neutral-700 dark:text-neutral-300 h-4 w-4 absolute left-3"/>
         <Input
          placeholder="Search for a job using title"
          value={value}
          onChange={(e)=>setValue(e.target.value)}
-         className="w-full pl-9 rounded-lg bg-blue-200 focus-visible:ring-blue-50 text-sm text-gray-800"
+         className="w-full pl-9 rounded-lg bg-blue-500 border-2 border-blue-700 focus-visible:ring-blue-200 text-sm text-white placeholder:text-blue-100 shadow-lg"
         />
         {
             value &&(

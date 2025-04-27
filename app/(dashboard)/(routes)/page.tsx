@@ -7,21 +7,30 @@ const DashboardHomePage = async () => {
   const jobs = await getJobs({}); // Fetching jobs
 
   return (
-    <div className="flex-col py-6 px-4 space-y-24">
-      <Box className="flex-col justify-center w-full space-y-4 mt-12">
-        <h2 className="text-2xl md:text-4xl font-sans font-bold tracking-wide text-neutral-600">
+    <div className="flex flex-col py-8 px-2 md:px-8 space-y-14 bg-gradient-to-br from-blue-50 via-white to-purple-50 min-h-screen">
+      <Box className="flex flex-col justify-center items-center w-full space-y-4 mt-8 bg-white/80 rounded-2xl shadow-lg p-8 backdrop-blur-md">
+        <Image
+          alt="Career Hub Logo"
+          src="/img/logo.png"
+          width={120}
+          height={120}
+          className="object-contain rounded-full mb-4 shadow-lg border-4 border-blue-100"
+        />
+        <h2 className="text-3xl md:text-5xl font-sans font-extrabold tracking-wide text-blue-700">
           Career Hub
         </h2>
-        <p className="text-2xl text-muted-foreground">{jobs.length}+ jobs for you to explore</p>
+        <p className="text-xl md:text-2xl text-muted-foreground">{jobs.length}+ jobs for you to explore</p>
       </Box>
       <HomesearchContainer />
-      <Image
-        alt="Home Screen Banner"
-        src="/img/job-portal.jpg"
-        width={1000}
-        height={240}
-        className="object-cover rounded-lg"
-      />
+      <div className="w-full flex justify-center">
+        <Image
+          alt="Home Screen Banner"
+          src="/img/job-portal.jpg"
+          width={1000}
+          height={240}
+          className="object-cover rounded-2xl shadow-xl border border-blue-100"
+        />
+      </div>
     </div>
   );
 };

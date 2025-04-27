@@ -29,7 +29,7 @@ const JobDetailsPageContent = ({ job, jobId, userProfile }: JobDetailsPageConten
 
     try {
       // Send PATCH request to update appliedJobs
-      await axios.patch(`/api/users/${userProfile?.userId}/appliedjobs`, jobId);
+      await axios.patch(`/api/users/${userProfile?.userId}/appliedjobs`, { jobId });
 
       // Success notification
       toast.success("Successfully applied for the job!");

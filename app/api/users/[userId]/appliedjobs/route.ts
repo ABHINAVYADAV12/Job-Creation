@@ -27,18 +27,30 @@ export const PATCH = async (req: Request) => {
       return new NextResponse('User Profile Not found', { status: 404 });
     }
 
-    // Update the appliedJobs array with the new jobId
-    const updatedProfile = await db.userProfile.update({
-      where: { userId },
-      data: {
-        appliedJobs: {
-          push: {jobId},
-        },
-      },
-    });
+    // Initialize appliedJobs if it doesn't exist
+    if (!profile.appliedJobs) {
+      await db.userProfile.update({
+        where: { userId },
+        data: { appliedJobs: [] },
+      });
+    }
 
-    // Return the updated profile as a JSON response
-    return NextResponse.json(updatedProfile);
+    // Update the appliedJobs array with the new jobId and appliedAt
+    try {
+      const jobIdValue = typeof jobId === 'object' && jobId.jobId ? jobId.jobId : jobId;
+      const updatedProfile = await db.userProfile.update({
+        where: { userId },
+        data: {
+          appliedJobs: {
+            push: { jobId: jobIdValue, appliedAt: new Date() },
+          },
+        },
+      });
+      return NextResponse.json(updatedProfile);
+    } catch (updateError) {
+      console.error('[JOB_APPLIED_JOBS_PATCH_UPDATE]:', updateError);
+      return new NextResponse('Failed to update appliedJobs', { status: 500 });
+    }
 
   } catch (error) {
     console.error('[JOB_APPLIED_JOBS_PATCH]:', error);

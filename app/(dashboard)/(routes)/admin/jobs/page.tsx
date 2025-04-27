@@ -7,10 +7,16 @@ import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import { db } from "@/lib/db"
 import {format} from "date-fns"
+
 const JobsPageOverview =async () => {
   const {userId}=auth()
   if(!userId){
     return redirect("/")
+  }
+  // Fetch user profile and check role
+  const userProfile = await db.userProfile.findUnique({ where: { userId } });
+  if (!userProfile || userProfile.role !== "admin") {
+    return redirect("/");
   }
   const jobs= await db.job.findMany({
       where:{

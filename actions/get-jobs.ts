@@ -12,12 +12,16 @@ type GetJobs={
         categoryId?:string
 };
 export const getJobs=async({
-   title,createdAtFilter,shiftTiming,workMode,yearsofExperience,savedJobs,categoryId 
+   title,savedJobs,categoryId 
 }:GetJobs):Promise<Job[]>=>{
     const {userId}=auth()
     try{
         // initialise the query object with common options
-        let query: any={
+        const query: {
+          where: Record<string, unknown>;
+          include: { company: boolean; category: boolean };
+          orderBy: { createdAt: "desc" };
+        } = {
             where:{
               isPublished:true
             },
@@ -32,6 +36,7 @@ export const getJobs=async({
         if(typeof title!=="undefined"||typeof categoryId!=="undefined"){
           query.where={
             AND:[
+              { isPublished: true },
               typeof title!=="undefined"&&{
                 title:{
                   contains:title,

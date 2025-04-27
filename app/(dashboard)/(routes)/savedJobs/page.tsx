@@ -20,37 +20,33 @@ interface SearchProps {
 const SavedJobsPage = async ({ searchParams }: SearchProps) => {
   const { userId } = auth();
 
-  // If no userId is found, redirect to home
   if (!userId) {
     redirect("/");
-    return null; // Return nothing if redirected
+    return null;
   }
 
-  // Get jobs based on search parameters, filtering for saved jobs
   const jobs = await getJobs({
     ...searchParams,
     savedJobs: true,
   });
 
   return (
-    <div className="flex-col">
-      <Box className="mt-4 items-center justify-start gap-2 mb-4 px-2">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <Box className="mt-4 items-center justify-start gap-2 mb-4 px-2 bg-opacity-70 shadow-none border-none">
         <CustomBreadCrumb breadCrumbItem={[]} breadCrumbPage="Saved Jobs" />
       </Box>
-      <Box className="w-full h-44 bg-purple-600/20 justify-center">
-  <h2 className="font-sans uppercase text-3xl tracking-wider font-bold">
-    Saved Jobs
-  </h2>
-</Box>
-
-<div className="px-6 pt-6 md:mb-0">
-  <SearchContainer />
-</div>
-
-<div className="p-4">
-  <PageContent jobs={jobs} userId={userId} />
-</div>
-
+      <Box className="w-full flex flex-col items-center justify-center bg-white/90 backdrop-blur-md rounded-2xl shadow-lg p-8 mb-8">
+        <h2 className="font-sans uppercase text-3xl md:text-4xl tracking-wider font-bold text-purple-800 mb-2">
+          Saved Jobs
+        </h2>
+        <p className="text-muted-foreground text-lg">Easily revisit jobs you love</p>
+      </Box>
+      <div className="px-2 md:px-8 pt-2 md:mb-0">
+        <SearchContainer />
+      </div>
+      <div className="p-2 md:p-6">
+        <PageContent jobs={jobs} userId={userId} />
+      </div>
     </div>
   );
 };

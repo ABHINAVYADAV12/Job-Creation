@@ -5,13 +5,13 @@ html,body,:root{
   height:100%
 }
 :root {
-  --background: #ffffff;
+  --background: #f3f4f6; /* Light gray (Tailwind zinc-100) */
   --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #18181b; /* Tailwind zinc-900 */
     --foreground: #ededed;
   }
 }
@@ -82,6 +82,40 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+}
+
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="time"] {
+  background: #2563eb !important; /* Tailwind blue-600 */
+  color: #111 !important; /* Use a deep black for best contrast */
+  border: 2px solid #1e40af !important; /* Tailwind blue-800 */
+  border-radius: 0.5rem !important;
+  box-shadow: 0 2px 8px 0 rgba(37,99,235,0.10);
+}
+input[type="text"]::placeholder,
+input[type="search"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="number"]::placeholder,
+input[type="tel"]::placeholder,
+input[type="url"]::placeholder,
+input[type="date"]::placeholder,
+input[type="datetime-local"]::placeholder,
+input[type="month"]::placeholder,
+input[type="week"]::placeholder,
+input[type="time"]::placeholder {
+  color: #dbeafe !important; /* Tailwind blue-100 */
+  opacity: 1;
 }
 
 @layer base {

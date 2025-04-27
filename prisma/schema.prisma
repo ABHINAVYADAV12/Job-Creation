@@ -71,6 +71,7 @@ model UserProfile{
   fullName String?
   contact String?
   email String?
+  role String @default("user") // 'admin' or 'user'
   appliedJobs AppliedJob[]
   resumes Resumes[]
   activeResumeId String?

@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button"
 import { db } from "@/lib/db"
 import { auth } from "@clerk/nextjs/server"
 import { Plus } from "lucide-react"
-
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { columns, CompanyColumns } from "./_components/column"
@@ -14,7 +13,12 @@ const Comapanypage = async() => {
   if(!userId){
    return redirect("/")
   }
-const companies=await db.company.findMany({
+  // Fetch user profile and check role
+  const userProfile = await db.userProfile.findUnique({ where: { userId } });
+  if (!userProfile || userProfile.role !== "admin") {
+    return redirect("/");
+  }
+  const companies=await db.company.findMany({
   where:{
     userId,
   },
