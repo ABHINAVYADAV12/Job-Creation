@@ -16,6 +16,7 @@ import JobMode from "./_components/work-mode"
 import WorkExperience from "./_components/work-experience"
 import JobDescription from "./_components/job-description"
 import CompanyForm from "./_components/company-form"
+import JobRequirementsGenAI from "../_components/job-requirements-genai";
 const JobDetailsPage =async(
     {params} :{params:{jobId: string}})=>{
       //verify mongodb id
@@ -25,7 +26,7 @@ const JobDetailsPage =async(
       }
       const {userId}=auth()
       if(!userId){
-        return redirect("/")
+        return redirect("/admin/jobs")
       }
       const job=await db.job.findUnique({
        where: {
@@ -118,6 +119,10 @@ const JobDetailsPage =async(
           {/*description */}
           <div className="col-span-2">
             <JobDescription initialData={job} jobId={job.id}/>
+          </div>
+          {/* Job Requirements & Tags Section */}
+          <div className="col-span-2">
+            <JobRequirementsGenAI jobId={job.id} />
           </div>
         </div>
        </div>

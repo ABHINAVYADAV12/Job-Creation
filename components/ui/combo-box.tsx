@@ -44,28 +44,34 @@ const ComboBox = ({ options, value, onChange, heading }: ComboBoxProps) => {
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[250px] p-0 bg-white border border-gray-300 shadow-2xl rounded-xl">
         <Command>
           {/* Display heading inside the dropdown */}
-          <div className="px-3 py-2 text-sm font-medium border-b">{heading}</div>
+          <div className="px-3 py-2 text-base font-semibold border-b bg-gray-50 text-gray-800 rounded-t-xl">
+            {heading}
+          </div>
 
-          <CommandInput placeholder="Search option..." />
+          <CommandInput placeholder="Search category..." className="bg-gray-100 rounded mt-2 mb-2 px-2 py-2 text-gray-800 border border-gray-200 focus:border-blue-400" />
           <CommandList>
-            <CommandEmpty>No options found.</CommandEmpty>
+            <CommandEmpty>No categories found.</CommandEmpty>
             <CommandGroup>
               {options.map((option) => (
                 <CommandItem
                   key={option.value}
-                  value={option.value}
-                  onSelect={(currentValue) => {
-                    onChange(currentValue); // Update selected value
+                  value={option.label}
+                  onSelect={(selectedLabel) => {
+                    const selectedOption = options.find(opt => opt.label === selectedLabel);
+                    if (selectedOption) {
+                      onChange(selectedOption.value); // Pass the ID back
+                    }
                     setOpen(false); // Close dropdown
                   }}
+                  className="text-gray-800 hover:bg-blue-100 hover:text-blue-800 transition-colors cursor-pointer rounded"
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === option.value ? "opacity-100" : "opacity-0"
+                      value === option.value ? "opacity-100 text-blue-600" : "opacity-0"
                     )}
                   />
                   {option.label}

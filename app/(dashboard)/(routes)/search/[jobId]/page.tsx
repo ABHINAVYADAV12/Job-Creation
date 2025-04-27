@@ -37,8 +37,15 @@ const JobDetailsPage = async({params}:{params:{jobId:string}}) => {
    const filterredJobs=jobs.filter(
     j=>j.id !==job?.id &&j.categoryId===job?.categoryId
    )
+   let hasApplied = false;
+   if (userId) {
+     const application = await db.application.findFirst({
+       where: { jobId: job.id, userId },
+     });
+     hasApplied = !!application;
+   }
   return (
-    <div className='flex-col md:p-8 p-4'><JobDetailsPageContent job={job} userProfile={profile} jobId={job.id}/>
+    <div className='flex-col md:p-8 p-4'><JobDetailsPageContent job={job} userProfile={profile} jobId={job.id} hasApplied={hasApplied}/>
     {filterredJobs && filterredJobs.length > 0 && (
         <>
           <Separator/>

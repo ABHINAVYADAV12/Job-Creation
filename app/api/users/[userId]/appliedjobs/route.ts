@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db'; // Assuming you have a db instance for Prisma or similar
 import { auth } from '@clerk/nextjs/server';
+import { sendMail } from '@/lib/mailer';
 
 export const PATCH = async (req: Request) => {
   try {
@@ -46,6 +47,19 @@ export const PATCH = async (req: Request) => {
           },
         },
       });
+
+      // Fetch job and user info for email
+      const job = await db.job.findUnique({ where: { id: jobIdValue } });
+      const user = await db.userProfile.findUnique({ where: { userId } });
+      if (job && user && user.email) {
+        await sendMail({
+          to: user.email,
+          subject: `Job Application Confirmation: ${job.title}`,
+          html: `<p>Hello ${user.fullName || ''},</p><p>You have successfully applied for the job: <b>${job.title}</b>.</p><p>Thank you for using our portal!</p>`,
+          text: `Hello ${user.fullName || ''},\nYou have successfully applied for the job: ${job.title}.\nThank you for using our portal!`,
+        });
+      }
+
       return NextResponse.json(updatedProfile);
     } catch (updateError) {
       console.error('[JOB_APPLIED_JOBS_PATCH_UPDATE]:', updateError);

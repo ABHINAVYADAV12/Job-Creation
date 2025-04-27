@@ -8,6 +8,7 @@ import { db } from "@/lib/db";
 import EmailForm from "./_components/email-form";
 import ContactForm from "./_components/contact-form";
 import ResumeForm from "./_components/resume";
+import AppliedJobsSection from "./_components/applied-jobs-section";
 
 const ProfilePage = async () => {
   const { userId } = auth();
@@ -29,6 +30,16 @@ const ProfilePage = async () => {
       },
     },
   });
+
+  // Fetch all applications for this user from the Application table
+  const applications = await db.application.findMany({
+    where: { userId },
+    select: { jobId: true },
+  });
+  const appliedJobIds = applications.map((app) => app.jobId);
+  const appliedJobsData = appliedJobIds.length > 0 ? await db.job.findMany({
+    where: { id: { in: appliedJobIds } },
+  }) : [];
 
   return (
     <div className="flex flex-col items-center justify-center p-0 md:p-10 bg-gradient-to-br from-blue-50 via-white to-purple-50 min-h-screen">
@@ -53,6 +64,7 @@ const ProfilePage = async () => {
             <ContactForm initialData={profile} userId={userId} />
           </div>
           <ResumeForm initialData={profile} userId={userId} />
+          <AppliedJobsSection jobs={appliedJobsData} userId={userId} />
         </div>
       </Box>
     </div>

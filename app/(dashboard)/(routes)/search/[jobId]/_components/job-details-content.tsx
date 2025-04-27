@@ -17,9 +17,10 @@ interface JobDetailsPageContentProps {
   job: Job & { company: Company | null };
   jobId: string;
   userProfile: UserProfile & { resumes: Resumes[] } | null;
+  hasApplied?: boolean;
 }
 
-const JobDetailsPageContent = ({ job, jobId, userProfile }: JobDetailsPageContentProps) => {
+const JobDetailsPageContent = ({ job, jobId, userProfile, hasApplied }: JobDetailsPageContentProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -28,14 +29,17 @@ const JobDetailsPageContent = ({ job, jobId, userProfile }: JobDetailsPageConten
     setIsLoading(true);
 
     try {
-      // Send PATCH request to update appliedJobs
-      await axios.patch(`/api/users/${userProfile?.userId}/appliedjobs`, { jobId });
-
-      // Success notification
+      // Send POST request to create Application entry
+      await axios.post(`/api/jobs/${jobId}/apply`, {
+        userId: userProfile?.userId,
+        resumeUrl: userProfile?.resumes.find(
+          (resume) => resume.id === userProfile?.activeResumeId
+        )?.url || null,
+      });
       toast.success("Successfully applied for the job!");
     } catch (error) {
       console.log((error as Error).message);
-      toast.error("Something went wrong..");
+      toast.error("Something went wrong.. Please try again.");
     } finally {
       setOpen(false);
       setIsLoading(false);
@@ -45,7 +49,7 @@ const JobDetailsPageContent = ({ job, jobId, userProfile }: JobDetailsPageConten
 
   return (
     <>
-      <ApplyModal isOpen={open} onClose={() => setOpen(false)} onConfirm={onApplied} loading={isLoading} userProfile={userProfile} />
+      <ApplyModal isOpen={open} onCloseAction={() => setOpen(false)} onConfirmAction={onApplied} loading={isLoading} userProfile={userProfile} />
 
       <Box className="mt-4">
         <CustomBreadCrumb
@@ -90,7 +94,7 @@ const JobDetailsPageContent = ({ job, jobId, userProfile }: JobDetailsPageConten
         <div>
           {userProfile ? (
             <>
-              {!userProfile?.appliedJobs?.some((appliedJob) => appliedJob.jobId === jobId) ? (
+              {!hasApplied ? (
                 <Button className="text-sm bg-purple-700 hover:bg-purple-900 hover:shadow-sm" onClick={() => setOpen(true)}>
                   Apply
                 </Button>

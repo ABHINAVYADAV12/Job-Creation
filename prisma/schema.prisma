@@ -33,6 +33,7 @@ model Job{
   company Company? @relation(fields:[companyId],references:[id])
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  applications Application[]
   @@index([categoryId])
   @@index([companyId])
   @@fulltext([title])
@@ -75,6 +76,7 @@ model UserProfile{
   appliedJobs AppliedJob[]
   resumes Resumes[]
   activeResumeId String?
+  applications Application[]
 }
 type AppliedJob{
   jobId String
@@ -89,4 +91,13 @@ model Resumes{
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   @@index([userProfileId],name :"idx_userProfileId")
+}
+model Application {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  jobId     String   @db.ObjectId
+  userId    String
+  resumeUrl String?
+  createdAt DateTime @default(now())
+  job       Job      @relation(fields: [jobId], references: [id])
+  user      UserProfile @relation(fields: [userId], references: [userId])
 }

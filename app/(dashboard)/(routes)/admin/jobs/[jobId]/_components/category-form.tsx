@@ -76,7 +76,12 @@ const CategoryForm = ({ initialData, jobId, options }: CategoryFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <ComboBox heading="Categories" options={options} {...field} />
+                    <ComboBox
+                      heading="Categories"
+                      options={options}
+                      value={field.value}
+                      onChange={(val) => field.onChange(val)}
+                    />
                   </FormControl>
                 </FormItem>
               )}
