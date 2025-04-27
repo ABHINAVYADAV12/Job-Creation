@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getServerSession } from 'next-auth';
 import { db } from '@/lib/db';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -29,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       appliedAt: app.createdAt
     }));
     return res.status(200).json(formatted);
-  } catch (error) {
+  } catch {
     return res.status(500).json({ message: 'Server error' });
   }
 }
