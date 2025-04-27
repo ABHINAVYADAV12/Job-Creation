@@ -9,20 +9,20 @@ interface CategoryItemProps{
     value:string
 }
 const CategoryItem = ({label,value}:CategoryItemProps) => {
-    const pathname=usePathname()
-    const router=useRouter()
-    const searchParams=useSearchParams()
-    const currentcategoryId=searchParams.get("categoryId")
-    const currenttitle=searchParams.get("title")
-    const isSelected=currentcategoryId===value
-    const onClick=()=>{
-      const url=qs.stringifyUrl({
-        url:pathname,
-        query:{
-            title:currenttitle,
-            categoryId:isSelected?null:value
-        },  
-      }, {skipNull :true,skipEmptyString:true})
+    const pathname = usePathname() ?? "";
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const currentcategoryId = (searchParams?.get("categoryId") ?? "");
+    const currenttitle = (searchParams?.get("title") ?? "");
+    const isSelected = currentcategoryId === value
+    const onClick = () => {
+      const url = qs.stringifyUrl({
+        url: pathname,
+        query: {
+          title: currenttitle,
+          categoryId: isSelected ? undefined : value
+        },
+      }, { skipNull: true, skipEmptyString: true })
       router.push(url)
     }
   return (
