@@ -9,13 +9,13 @@ import qs from "query-string";
 const SearchContainer = () => {
   const searchParams=useSearchParams()
   const router=useRouter()
-  const pathname=usePathname()
-  const currentCategoryId=searchParams.get("categoryId")
-  const currentTitle=searchParams.get("title")
-  const createdAtFilter=searchParams.get("createdAtFilter")
-  const currentshiftTiming=searchParams.get("shiftTiming")
-  const currentWorkMode=searchParams.get("workMode")
-    const  [value, setValue] = useState(currentTitle||"")
+  const pathname=usePathname() ?? ""
+  const currentCategoryId=searchParams?.get("categoryId") ?? ""
+  const currentTitle=searchParams?.get("title") ?? ""
+  const createdAtFilter=searchParams?.get("createdAtFilter") ?? ""
+  const currentshiftTiming=searchParams?.get("shiftTiming") ?? ""
+  const currentWorkMode=searchParams?.get("workMode") ?? ""
+    const  [value, setValue] = useState(currentTitle)
     useEffect(() => {
       const url = qs.stringifyUrl({
         url: pathname, // Base URL (path)
