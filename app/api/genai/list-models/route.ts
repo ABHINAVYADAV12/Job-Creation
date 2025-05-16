@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-
 export const GET = async () => {
   try {
     const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
